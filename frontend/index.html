@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="icon" href="favicon.ico">
+    <title>SEIRA Jewellery</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">SEIRA</div>
+  <div class="diamond-anim">💎</div>
+  <p>LOADING</p>
+</div>
+
+<!-- TOAST -->
+<div class="success-toast" id="toast"></div>
+
+<!-- OVERLAY -->
+<div class="overlay-bg" id="overlayBg" onclick="closeCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cartDrawer">
+  <button class="drawer-close" onclick="closeCart()">✕</button>
+  <h3>Your Cart</h3>
+  <div class="drawer-items" id="drawerItems"></div>
+  <div class="drawer-footer">
+    <div class="drawer-total">
+      <span>Total</span>
+      <span id="drawerTotal">₹0</span>
+    </div>
+    <button class="btn-gold" style="width:100%" onclick="checkout()">Checkout</button>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="product-modal" id="productModal">
+  <div class="modal-inner" id="modalInner">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" onclick="showPage('home')">SEIRA</a>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')">Home</a></li>
+    <li><a onclick="showPage('shop')">Shop</a></li>
+    <li><a onclick="openGender('Men')">Men</a></li>
+    <li><a onclick="openGender('Women')">Women</a></li>
+    <li><a onclick="openCollection()">Collections</a></li>
+    <li><a onclick="showPage('wishlist')">Wishlist</a></li>
+    <span id="navUser"></span>
+  </ul>
+  <div class="search-bar">
+    <span>🔍</span>
+    <input type="text" id="searchInput" placeholder="Search jewellery..." oninput="handleSearch(this.value)">
+  </div>
+  <div class="nav-icons">
+    <button onclick="showPage('login')" title="Login">👤</button>
+    <button onclick="showPage('wishlist')" title="Wishlist">♡</button>
+    <div class="cart-badge">
+      <button onclick="toggleCart()" title="Cart">🛍</button>
+      <span id="cartCount">0</span>
+    </div>
+    <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HOME PAGE ═══════════════ -->
+<div class="page active" id="page-home">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-img"></div>
+    <div class="particles" id="particles"></div>
+    <div class="hero-content">
+      <h1>SEIRA</h1>
+      <p class="tagline">Shine Beyond Forever</p>
+      <div class="hero-btns">
+        <button class="btn-gold" onclick="showPage('shop')">Shop Now</button>
+        <button class="btn-outline" onclick="document.getElementById('categories-section').scrollIntoView({behavior:'smooth'})">Explore Collection</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Model Strip -->
+  <section class="model-strip">
+    <h2>Wear Your Story</h2>
+    <p>CURATED LOOKS FOR EVERY OCCASION</p>
+    <div class="model-grid">
+      <div class="model-card" onclick="showPage('shop')">
+        <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80" alt="Model wearing SEIRA necklace">
+        <div class="overlay"><span>Necklaces</span></div>
+      </div>
+      <div class="model-card" onclick="showPage('shop')">
+        <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80" alt="Model with rings">
+        <div class="overlay"><span>Rings</span></div>
+      </div>
+      <div class="model-card" onclick="showPage('shop')">
+        <img src="https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?w=600&q=80" alt="Model wearing earrings">
+        <div class="overlay"><span>Earrings</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="section" id="categories-section">
+    <div class="section-title">
+      <h2>Shop by Category</h2>
+      <p>DISCOVER OUR CURATED COLLECTIONS</p>
+    </div>
+    <div class="categories-grid">
+      <div class="cat-card" onclick="filterShop('Rings')"><div class="icon">💍</div><h3>Rings</h3></div>
+      <div class="cat-card" onclick="filterShop('Necklaces')"><div class="icon">📿</div><h3>Necklaces</h3></div>
+      <div class="cat-card" onclick="filterShop('Earrings')"><div class="icon">✨</div><h3>Earrings</h3></div>
+      <div class="cat-card" onclick="filterShop('Bracelets')"><div class="icon">💛</div><h3>Bracelets</h3></div>
+      <div class="cat-card" onclick="filterShop('Chains')"><div class="icon">🔗</div><h3>Chains</h3></div>
+      <div class="cat-card" onclick="filterShop('Bangles')"><div class="icon">⭕</div><h3>Bangles</h3></div>
+      <div class="cat-card" onclick="filterShop('Watches')"><div class="icon">⌚</div><h3>Watches</h3></div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="section" style="background:var(--off-white)" id="featured-section">
+    <div class="section-title">
+      <h2>Featured Collection</h2>
+      <p>HANDPICKED BESTSELLERS</p>
+    </div>
+    <div class="products-grid" id="featuredGrid"></div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <div class="section-title">
+      <h2>What Our Clients Say</h2>
+      <p>TRUSTED BY THOUSANDS</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <img class="reviewer-img" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Reviewer">
+        <p>"The diamond ring I ordered was absolutely stunning. The craftsmanship is impeccable and it arrived beautifully packaged."</p>
+        <div class="reviewer">⭐⭐⭐⭐⭐ — Priya Sharma</div>
+      </div>
+      <div class="testimonial-card">
+        <img class="reviewer-img" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Reviewer">
+        <p>"SEIRA's gold necklace is a masterpiece. I receive compliments every time I wear it. Truly worth every rupee."</p>
+        <div class="reviewer">⭐⭐⭐⭐⭐ — Rahul Mehta</div>
+      </div>
+      <div class="testimonial-card">
+        <img class="reviewer-img" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Reviewer">
+        <p>"Gifted my wife SEIRA earrings on our anniversary — she was moved to tears. Exceptional quality and timeless design."</p>
+        <div class="reviewer">⭐⭐⭐⭐⭐ — Anjali Verma</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════ SHOP PAGE ═══════════════ -->
+<div class="page" id="page-shop">
+  <div class="shop-hero">
+    <h1>Our Collection</h1>
+    <p>TIMELESS PIECES CRAFTED FOR YOU</p>
+  </div>
+  <div class="shop-layout">
+    <!-- Filters -->
+    <aside class="filters-panel">
+      <h3>Filters</h3>
+      <div class="filter-group">
+        <label>Category</label>
+        <div class="filter-chips" id="catChips">
+          <div class="filter-chip active" onclick="setCatFilter(this,'All')">All</div>
+          <div class="filter-chip" onclick="setCatFilter(this,'Rings')">Rings</div>
+          <div class="filter-chip" onclick="setCatFilter(this,'Necklaces')">Necklaces</div>
+          <div class="filter-chip" onclick="setCatFilter(this,'Earrings')">Earrings</div>
+          <div class="filter-chip" onclick="setCatFilter(this,'Bracelets')">Bracelets</div>
+          <div class="filter-chip" onclick="setCatFilter(this,'Chains')">Chains</div>
+          <div class="filter-chip" onclick="setCatFilter(this,'Bangles')">Bangles</div>
+          <div class="filter-chip" onclick="setCatFilter(this,'Watches')">Watches</div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>Gender</label>
+        <div class="filter-chips">
+          <div class="filter-chip active" onclick="setGenderFilter(this,'All')">All</div>
+          <div class="filter-chip" onclick="setGenderFilter(this,'Women')">Women</div>
+          <div class="filter-chip" onclick="setGenderFilter(this,'Men')">Men</div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>Max Price: <span id="priceVal">₹500,000</span></label>
+        <input type="range" min="1000" max="500000" value="500000" step="1000" oninput="setPriceFilter(this.value)">
+      </div>
+      <div class="filter-group">
+        <label>Material</label>
+        <select onchange="setMaterialFilter(this.value)">
+          <option value="All">All Materials</option>
+          <option>Gold</option>
+          <option>Silver</option>
+          <option>Diamond</option>
+          <option>Platinum</option>
+          <option>Emerald</option>
+        </select>
+      </div>
+    </aside>
+    <!-- Products -->
+    <div>
+      <div class="shop-top">
+        <span id="productCount">Showing all products</span>
+        <select class="sort-select" onchange="sortProducts(this.value)">
+          <option value="default">Sort by: Featured</option>
+          <option value="low">Price: Low to High</option>
+          <option value="high">Price: High to Low</option>
+          <option value="rating">Best Rating</option>
+          <option value="newest">Newest</option>
+        </select>
+      </div>
+      <div class="products-grid" id="shopGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CART PAGE ═══════════════ -->
+<div class="page" id="page-cart">
+  <div class="cart-page">
+    <h1>Shopping Cart</h1>
+    <div id="cartContent"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ WISHLIST PAGE ═══════════════ -->
+<div class="page" id="page-wishlist">
+  <div class="wishlist-page">
+    <h1>My Wishlist</h1>
+    <div class="products-grid" id="wishlistGrid"></div>
+    <div id="wishlistEmpty" style="display:none;text-align:center;padding:4rem 2rem;">
+      <div style="font-size:3rem;margin-bottom:1rem">♡</div>
+      <p style="color:var(--gray);margin-bottom:1.5rem">Your wishlist is empty</p>
+      <button class="btn-gold" onclick="showPage('shop')">Browse Collection</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ LOGIN PAGE ═══════════════ -->
+<div class="page" id="page-login">
+  <div class="login-page">
+    <div class="auth-container">
+      <!-- Visual side with human model photo -->
+      <div class="auth-visual">
+        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80" alt="SEIRA model wearing jewellery">
+        <div class="overlay">
+          <h2>SEIRA</h2>
+          <p>SHINE BEYOND FOREVER</p>
+        </div>
+      </div>
+      <!-- Form side -->
+      <div class="auth-form-wrap">
+        <div style="margin-bottom:2rem">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold);letter-spacing:.2em;margin-bottom:.3rem">Welcome</div>
+          <div style="font-size:.72rem;color:var(--gray);letter-spacing:.1em">Sign in to your SEIRA account</div>
+        </div>
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchTab('login')">Login</button>
+          <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+        <!-- Login Form -->
+        <div class="auth-form active" id="form-login">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" placeholder="your@email.com">
+            <div class="form-error" id="loginEmailErr">Please enter a valid email</div>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPass" placeholder="••••••••">
+            <div class="form-error" id="loginPassErr">Password must be at least 6 characters</div>
+          </div>
+          <button class="btn-submit" onclick="handleLogin(event)">Login to SEIRA</button>
+          <div class="divider"><span>or</span></div>
+          <button class="btn-google" onclick="showToast('Google login coming soon!')">
+            <span>G</span> Continue with Google
+          </button>
+        </div>
+        <!-- Signup Form -->
+        <div class="auth-form" id="form-signup">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="signupName" placeholder="Your Full Name" name="username">
+            <div class="form-error" id="signupNameErr">Please enter your name</div>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="signupEmail" placeholder="your@email.com" name="email">
+            <div class="form-error" id="signupEmailErr">Please enter a valid email</div>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="signupPass" placeholder="••••••••" name="password">
+            <div class="form-error" id="signupPassErr">Password must be at least 6 characters</div>
+          </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" id="signupConfirm" placeholder="••••••••">
+            <div class="form-error" id="signupConfirmErr">Passwords do not match</div>
+          </div>
+          <button class="btn-submit" onclick="handleSignup(event)">Create Account</button>
+          <div class="divider"><span>or</span></div>
+          <button class="btn-google" onclick="showToast('Google signup coming soon!')">
+            <span>G</span> Sign up with Google
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="footer-logo">SEIRA</div>
+      <p style="margin-top:.8rem;font-size:.75rem;color:#555;line-height:1.7">Crafting timeless jewellery that tells your story. Premium gold, diamond & silver pieces since 2010.</p>
+      <div class="social-links" style="margin-top:1rem">
+        <a href="#" title="Instagram">📷</a>
+        <a href="#" title="Facebook">f</a>
+        <a href="#" title="Pinterest">P</a>
+        <a href="#" title="Twitter">𝕏</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('shop')">Shop All</a>
+      <a onclick="showPage('wishlist')">Wishlist</a>
+      <a onclick="showPage('cart')">Cart</a>
+      <a onclick="showPage('login')">Login / Sign Up</a>
+    </div>
+    <div class="footer-col">
+      <h4>Customer Support</h4>
+      <a href="#">About Us</a>
+      <a href="#">Contact Us</a>
+      <a href="#">Shipping Policy</a>
+      <a href="#">Returns & Exchanges</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <div class="footer-col">
+      <h4>Newsletter</h4>
+      <p>Get exclusive offers and new arrivals directly in your inbox.</p>
+      <div class="newsletter-form" style="margin-top:1rem">
+        <input type="email" placeholder="your@email.com">
+        <button onclick="showToast('Subscribed!')">Join</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 SEIRA Jewellery. All rights reserved. &nbsp;|&nbsp; Crafted with 💎 in India
+  </div>
+</footer>
+
+<!-- Dark mode toggle -->
+<button class="dark-toggle" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
+
+<script src="script.js"></script>
+</body>
+</html>
